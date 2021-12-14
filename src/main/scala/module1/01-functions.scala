@@ -1,5 +1,7 @@
 package module1
 
+import scala.annotation.tailrec
+import scala.collection.mutable.ArrayBuffer
 import scala.util.Try
 
 object functions {
@@ -79,13 +81,40 @@ object functions {
    * которые являются четными
    */
 
+  def filterEven(arr: Array[Int]): Array[Int] = {
+    @tailrec
+    def filterRec(arr: Array[Int], i: Int, resArr: Array[Int]): Array[Int] = arr match {
+      case Array() => Array()
+      case arr if i == arr.length => resArr
+      case arr => if (isEven(arr(i))) {
+        filterRec(arr, i + 1, arr(i) +: resArr)
+      } else {
+        filterRec(arr, i + 1, resArr)
+      }
+    }
 
+    filterRec(arr, 0, Array())
+  }
 
   /**
    * Задание 4. Написать ф-цию метод filterOdd, которая получает на вход массив чисел и возвращает массив тех из них,
    * которые являются нечетными
    */
+  def filterOdd(arr: Array[Int]): Array[Int] = {
+    @tailrec
+    def filterRec(arr: Array[Int], i: Int, resArr: ArrayBuffer[Int]): Array[Int] = arr match {
+      case Array() => Array()
+      case arr if i == arr.length => resArr.toArray
+      // TODO: What to place instead of `!` to use only one tailRec func
+      case arr => if (!isEven(arr(i))) {
+        filterRec(arr, i + 1, arr(i) +: resArr)
+      } else {
+        filterRec(arr, i + 1, resArr)
+      }
+    }
 
+    filterRec(arr, 0, ArrayBuffer())
+  }
 
   /**
    * return statement
