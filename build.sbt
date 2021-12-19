@@ -9,7 +9,9 @@ lazy val root = (project in file("."))
     version := "0.1",
     scalaVersion := "2.13.3",
     libraryDependencies ++= Seq(
-      kindProjector
+      kindProjector,
+      "org.scalatest" %% "scalatest" % "3.0.8" % "test",
+      "org.scalacheck" %% "scalacheck" % "1.15.4" % "test",
     ),
     addCompilerPlugin(Dependencies.kindProjector)
   )
