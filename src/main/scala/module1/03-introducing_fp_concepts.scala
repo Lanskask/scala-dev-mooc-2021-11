@@ -203,11 +203,11 @@ object opt {
       case Option.None => Option.None
     }
 
-    def flatMap[B](f: T => Option[B]): Option[B] = this match {
-      case Option.Some(v) => f(v)
-      case Option.None => Option.None
-    }
-  }
+       def flatMap[B](f: T => Option[B]): Option[B] = this match {
+           case Option.Some(v) => f(v)
+           case Option.None => Option.None
+       }
+   }
 
   object Option {
 
@@ -269,9 +269,6 @@ object list {
    * Nil - пустой список
    * Cons - непустой, содержит первый элемент (голову) и хвост (оставшийся список)
    */
-
-  //  case class List[T](head: T, tail: List[T])
-
   case object List {
 
     case class ::[+A](head: A, tail: List[A]) extends List[A]
