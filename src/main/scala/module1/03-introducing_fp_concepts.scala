@@ -7,7 +7,6 @@ import scala.collection.immutable.{AbstractSeq, LinearSeq}
 import scala.language.postfixOps
 
 
-
 /**
  * referential transparency
  */
@@ -20,16 +19,20 @@ object referential_transparency {
 
   sealed trait Notification
 
-  object Notification{
+  object Notification {
+
     case class Email(email: String, text: Html) extends Notification
+
     case class Sms(telephone: String, msg: String) extends Notification
+
   }
 
 
   case class AbiturientDTO(email: String, fio: String, password: String)
 
-  trait NotificationService{
+  trait NotificationService {
     def sendNotification(notification: Notification): Unit
+
     def createNotification(abiturient: Abiturient): Notification
   }
 
@@ -59,7 +62,6 @@ object recursion {
    * Реализовать метод вычисления n!
    * n! = 1 * 2 * ... n
    */
-
   def fact(n: Int): Int = {
     var _n = 1
     var i = 2
@@ -75,12 +77,12 @@ object recursion {
     if (n <= 0) 1 else n * factRec(n - 1)
   }
 
-
   def factTailRec(n: Int): Int = {
     @tailrec
-    def loop(n: Int, accum: Int): Int =
-      if (n == 1) accum
-      else loop(n - 1, n * accum)
+    def loop(n: Int, accum: Int): Int = n match {
+      case 1 => accum
+      case _ => loop(n - 1, n * accum)
+    }
 
     loop(n, 1)
   }
@@ -88,9 +90,18 @@ object recursion {
 
   /**
    * реализовать вычисление N числа Фибоначчи
-   * F0 = 0, F1 = 1, Fn = Fn-1 + Fn - 2
+   * F0 = 0, F1 = 1, Fn = Fn-1 + Fn-2
    *
    */
+  def fib(n: Int): Int = {
+    @tailrec
+    def loop(n: Int, a: Int, b: Int): Int = n match {
+      case 0 => a
+      case _ => loop(n - 1, b, a + b)
+    }
+
+    loop(n, 0, 1)
+  }
 
 
 }
@@ -203,14 +214,32 @@ object opt {
       case Option.None => Option.None
     }
 
-       def flatMap[B](f: T => Option[B]): Option[B] = this match {
-           case Option.Some(v) => f(v)
-           case Option.None => Option.None
-       }
-   }
+    def flatMap[B](f: T => Option[B]): Option[B] = this match {
+      case Option.Some(v) => f(v)
+      case Option.None => Option.None
+    }
+
+    /**
+     *
+     * Реализовать метод zip, который будет создавать Option от пары значений из 2-х Option
+     */
+    def zip[B](that: Option[B]): Option[(T, B)] = (this, that) match {
+      case (Option.Some(vA), Option.Some(vB)) => Option.Some(vA, vB)
+      case (Option.None, _) | (_, Option.None) => Option.None
+    }
+
+    /**
+     *
+     * Реализовать метод filter, который будет возвращать не пустой Option
+     * в случае если исходный не пуст и предикат от значения = true
+     */
+     def filter(f: T => Boolean): Option[T] = this match {
+       case Option.Some(v) if f(v) == true => Option.Some(v)
+       case _ =>  Option.None
+     }
+  }
 
   object Option {
-
     case class Some[T](v: T) extends Option[T]
 
     case object None extends Option[Nothing]
@@ -225,38 +254,11 @@ object opt {
    */
   def printIfAny[T](o: Option[T]): Unit = o match {
     case Option.Some(x) => println(x)
-    case Option.None => None
+    case Option.None =>
   }
 
 
-  /**
-   *
-   * Реализовать метод zip, который будет создавать Option от пары значений из 2-х Option
-   */
-  // TODO: I thing It's possible to solve it somehow mode pretty looking
-  def zip[T](a: Option[T], b: Option[T]): Option[Any] = {
-    a match {
-      case Option.Some(vA) => b match {
-        case Option.Some(vB) => Option.Some(vA, vB)
-        case Option.None => Option.Some(vA)
-      }
-      case Option.None => b match {
-        case Option.Some(vB) => Option.Some(vB)
-        case Option.None => Option.None
-      }
-    }
-  }
 
-
-  /**
-   *
-   * Реализовать метод filter, который будет возвращать не пустой Option
-   * в случае если исходный не пуст и предикат от значения = true
-   */
-  def filter[T](o: Option[T]): (Option[T], Boolean) = o match {
-    case Option.Some(v) => (Option(v), true) // todo: Should I return here an Option(v) or Option.Some(v)
-    //    case Option.None => (Option.None, false)
-  }
 
 }
 
