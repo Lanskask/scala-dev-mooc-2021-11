@@ -200,7 +200,7 @@ object opt {
 
   sealed trait Option[+T] {
     def isEmpty: Boolean = this match {
-      case Option.Some(v) => false
+      case Option.Some(_) => false
       case Option.None => true
     }
 
@@ -234,7 +234,7 @@ object opt {
      * в случае если исходный не пуст и предикат от значения = true
      */
      def filter(f: T => Boolean): Option[T] = this match {
-       case Option.Some(v) if f(v) == true => Option.Some(v)
+       case Option.Some(v) if f(v) => Option.Some(v)
        case _ =>  Option.None
      }
   }
@@ -303,19 +303,10 @@ object list {
      * Метод mkString возвращает строковое представление списка, с учетом переданного разделителя
      *
      */
-    //    @tailrec
     def mkString(delimeter: String): String = this match {
       case List.Nil => ""
       case List.::(head, List.Nil) => head.toString
-      case List.::(head, tail) => {
-        val rEnd = ", {1}$".r
-        val rSpaces = " +".r
-
-        rSpaces.replaceAllIn(
-          rEnd.replaceAllIn(head + delimeter + tail.mkString(delimeter), ""),
-          " "
-        )
-      }
+      case List.::(head, tail) => head.toString + delimeter + tail.mkString(delimeter)
     }
 
     /**
@@ -324,12 +315,11 @@ object list {
      * case class ::[+A](head: A, tail: List[A]) extends List[A]
      */
     def reverse(): List[T] = {
+      @tailrec
       def revRec[A](result: List[T], list: List[T]): List[T] = {
         list match {
           case List.Nil => result
-          case List.::(x, xs) => {
-            revRec(List.::(x, result), xs)
-          }
+          case List.::(x, xs) => revRec(List.::(x, result), xs)
         }
       }
 
