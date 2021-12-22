@@ -233,32 +233,30 @@ object opt {
      * Реализовать метод filter, который будет возвращать не пустой Option
      * в случае если исходный не пуст и предикат от значения = true
      */
-     def filter(f: T => Boolean): Option[T] = this match {
-       case Option.Some(v) if f(v) => Option.Some(v)
-       case _ =>  Option.None
-     }
+    def filter(f: T => Boolean): Option[T] = this match {
+      case Option.Some(v) if f(v) => Option.Some(v)
+      case _ => Option.None
+    }
+
+    /**
+     *
+     * Реализовать метод printIfAny, который будет печатать значение, если оно есть
+     */
+    def printIfAny(): Unit = this match {
+      case Option.Some(x) => println(x)
+      case Option.None =>
+    }
+
   }
 
   object Option {
+
     case class Some[T](v: T) extends Option[T]
 
     case object None extends Option[Nothing]
 
     def apply[T](v: T): Option[T] = Some(v)
   }
-
-
-  /**
-   *
-   * Реализовать метод printIfAny, который будет печатать значение, если оно есть
-   */
-  def printIfAny[T](o: Option[T]): Unit = o match {
-    case Option.Some(x) => println(x)
-    case Option.None =>
-  }
-
-
-
 
 }
 
