@@ -10,7 +10,8 @@ object App {
       println(a)
     }
 
-    val doomyFuncWithLoggingTime: String => Unit = hof.logRunningTime(doomyFunc)
+
+    val dummyFuncWithLoggingTime: String => Unit = hof.logRunningTime(doomyFunc)
 
     val v: PartialFunction[(Int, Int), Int] = {
       case (x, y) if y != 0 => x / y
