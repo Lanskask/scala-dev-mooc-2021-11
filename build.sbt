@@ -10,7 +10,7 @@ lazy val root = (project in file("."))
     scalaVersion := "2.13.3",
     libraryDependencies ++= Seq(
       kindProjector,
-      "org.scalatest" %% "scalatest" % "3.2.0" % "test",
+      "org.scalatest" %% "scalatest" % "3.0.8" % "test",
       "org.scalacheck" %% "scalacheck" % "1.15.4" % "test",
     ),
     addCompilerPlugin(Dependencies.kindProjector)
@@ -20,7 +20,6 @@ testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework"))
 
 scalacOptions += "-Ymacro-annotations"
 
-libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.10"
-libraryDependencies += "org.scalatest"  %% "scalatest"    % "3.2.0" % "test"
+libraryDependencies += "org.scalatest"  %% "scalatest"    % "3.2.10" % "test"
 libraryDependencies += "org.mockito"    % "mockito-core"  % "3.0.0" % "test"
 libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.13.3"
