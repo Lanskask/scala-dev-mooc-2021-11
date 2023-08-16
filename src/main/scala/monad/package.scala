@@ -4,26 +4,25 @@ package object monad {
    * Реализуйте методы map / flatMap / withFilter чтобы работал код и законы монад соблюдались
    * HINT: для проверки на пустой элемент можно использовать eq
    */
-
   trait Wrap[+A] {
-
     def get: A
 
-    def pure[R](x: R): Wrap[R] = ???
+    def pure[R](x: R): Wrap[R] = NonEmptyWrap(x)
 
-    def flatMap[R](f: A => Wrap[R]): Wrap[R] = {
-      ???
+    def flatMap[R](f: A => Wrap[R]): Wrap[R] = this match {
+      case EmptyWrap => Wrap.empty
+      case NonEmptyWrap(result) => f(result)
+      case _ => Wrap.empty // TODO: Should it be here?
     }
 
     // HINT: map можно реализовать через pure и flatMap
-    def map[R](f: A => R): Wrap[R] = {
-      ???
-    }
+    def map[R](f: A => R): Wrap[R] = flatMap(x => NonEmptyWrap(f(x)))
 
-    def withFilter(f: A => Boolean): Wrap[A] = {
-      ???
+    // TODO: I'm not sure that's correct :-)
+    def withFilter(f: A => Boolean): Wrap[A] = this flatMap {
+      case x if f(x) => NonEmptyWrap(x)
+      case _ => EmptyWrap
     }
-
   }
 
   object Wrap {
